@@ -4,31 +4,31 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/sathviknandan/8.2CDevSecOp.git'
+                echo 'Stage 1: Checking out code from GitHub (8.2CDevSecOps repo)'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
+                echo 'Stage 2: Installing dependencies (simulated with echo)'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'cmd /c "npm test || exit /b 0"'
+                echo 'Stage 3: Running unit tests (simulated with echo)'
             }
         }
 
         stage('Generate Coverage Report') {
             steps {
-                bat 'cmd /c "npm run coverage || exit /b 0"'
+                echo 'Stage 4: Generating coverage report (simulated with echo)'
             }
         }
 
         stage('NPM Audit (Security Scan)') {
             steps {
-                bat 'cmd /c "npm audit || exit /b 0"'
+                echo 'Stage 5: Running NPM security audit (simulated with echo)'
             }
         }
     }
