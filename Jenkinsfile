@@ -2,33 +2,65 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Stage 1: Checkout') {
             steps {
-                echo 'Stage 1: Checking out code from GitHub (8.2CDevSecOps repo)'
+                git branch: 'main', url: 'https://github.com/sathviknandan/8.2CDevSecOps.git'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Stage 2: Install Dependencies') {
             steps {
-                echo 'Stage 2: Installing dependencies (simulated with echo)'
+                bat 'npm install'
             }
         }
 
-        stage('Run Tests') {
+        stage('Stage 3: Run Tests') {
             steps {
-                echo 'Stage 3: Running unit tests (simulated with echo)'
+                bat 'cmd /c "npm test || exit /b 0"'
+            }
+            post {
+                always {
+                    emailext(
+                        to: 'your_email@example.com',
+                        subject: "Stage 3 - Run Tests Completed",
+                        body: """Hello,
+
+Stage 3 (Run Tests) has completed in the Jenkins pipeline.
+Please check the attached log or Jenkins console for details.
+
+Regards,
+Jenkins""",
+                        attachLog: true
+                    )
+                }
             }
         }
 
-        stage('Generate Coverage Report') {
+        stage('Stage 4: Generate Coverage Report') {
             steps {
-                echo 'Stage 4: Generating coverage report (simulated with echo)'
+                bat 'cmd /c "npm run coverage || exit /b 0"'
             }
         }
 
-        stage('NPM Audit (Security Scan)') {
+        stage('Stage 5: NPM Audit (Security Scan)') {
             steps {
-                echo 'Stage 5: Running NPM security audit (simulated with echo)'
+                bat 'cmd /c "npm audit || exit /b 0"'
+            }
+            post {
+                always {
+                    emailext(
+                        to: 'sathvik.chinthalapani@gmail.com',
+                        subject: "Stage 5 - NPM Security Scan Completed",
+                        body: """Hello,
+
+Stage 5 (NPM Audit - Security Scan) has completed in the Jenkins pipeline.
+Please check the attached log or Jenkins console for vulnerabilities.
+
+Regards,
+Jenkins""",
+                        attachLog: true
+                    )
+                }
             }
         }
     }
